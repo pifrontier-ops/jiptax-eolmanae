@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>세금 시간표 — 2026 부동산 세제개편</title>
+<meta name="description" content="2026년 부동산 세제개편, 현행·2027·2028·2029 네 시점의 종부세와 양도세를 나란히 비교합니다.">
+<meta property="og:title" content="세금 시간표 — 2026 부동산 세제개편">
+<meta property="og:description" content="언제 팔고 언제 버티는 게 유리한지, 네 시점을 나란히 봅니다.">
+<meta name="theme-color" content="#0A0C10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --bg:#0A0C10; --paper:#131820; --surface:#191F29; --surface2:#212936;
+  --line:#252D3B; --line2:#38424F;
+  --ink:#F4F7FB; --dim:#909CAF; --dim2:#5C6779;
+  --seal:#E2402C; --seal-dim:#8E2418; --jade:#2FB894; --gold:#D9A441; --slate:#7E90B2;
+  --r:16px;
+  --dock:0px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  font-variant-numeric:tabular-nums;
+  padding-bottom:calc(90px + env(safe-area-inset-bottom));
+  overflow-x:hidden;
+}
+@media(min-width:940px){body{padding-bottom:40px}}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+.serif{font-family:'Gowun Batang',serif}
+.mono{font-family:'IBM Plex Mono',monospace}
+button,input,select{font-family:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+
+/* ---------------- 헤더 ---------------- */
+.hdr-bg{
+  position:relative;
+  background:
+    radial-gradient(120% 90% at 82% -10%, rgba(226,64,44,.20), transparent 62%),
+    linear-gradient(180deg,#0E1117,var(--bg));
+  border-bottom:1px solid var(--line);
+  overflow:hidden;
+}
+.hdr-bg::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:34px 34px;
+  -webkit-mask-image:radial-gradient(80% 70% at 78% 0%,#000,transparent 70%);
+  mask-image:radial-gradient(80% 70% at 78% 0%,#000,transparent 70%);
+}
+header{position:relative;z-index:1;padding:26px 0 24px}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:18px}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;
+  color:var(--seal);text-transform:uppercase;display:flex;align-items:center;gap:8px;
+}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--seal)}
+.sharebtn{
+  display:flex;align-items:center;gap:7px;background:rgba(226,64,44,.1);
+  border:1px solid rgba(226,64,44,.42);color:#FF9B8B;
+  font-size:12.5px;font-weight:600;padding:8px 13px;border-radius:22px;cursor:pointer;
+  white-space:nowrap;transition:.15s;
+}
+.sharebtn:active{transform:scale(.96)}
+h1{
+  font-family:'Gowun Batang',serif;font-weight:700;
+  font-size:clamp(27px,7.2vw,46px);line-height:1.28;letter-spacing:-.015em;
+}
+h1 em{font-style:normal;color:var(--seal)}
+.sub{color:var(--dim);margin-top:13px;max-width:44em;font-size:14.2px;line-height:1.68}
+.sub b{color:var(--ink);font-weight:600}
+.warn{
+  margin-top:16px;padding:11px 14px;border-radius:11px;
+  background:rgba(226,64,44,.08);border:1px solid rgba(226,64,44,.3);
+  color:#FFC0B4;font-size:12.6px;line-height:1.6;
+}
+.warn b{color:#FF8E7A}
+
+/* ---------------- 탭 ---------------- */
+.tabwrap{position:sticky;top:0;z-index:30;background:rgba(10,12,16,.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;max-width:1120px;margin:0 auto;padding:0 16px}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{
+  background:none;border:0;color:var(--dim2);cursor:pointer;white-space:nowrap;
+  font-size:14.5px;font-weight:600;padding:13px 14px;
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s;
+}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--seal)}
+.panel{display:none;padding:22px 0 10px}
+.panel.on{display:block}
+
+/* ---------------- 레이아웃 ---------------- */
+.cols{display:grid;gap:16px;grid-template-columns:1fr;grid-template-areas:"result" "input" "ledger"}
+@media(min-width:940px){
+  .cols{grid-template-columns:356px 1fr;gap:20px;align-items:start;
+        grid-template-areas:"input result" "input ledger"}
+}
+.a-input{grid-area:input}.a-result{grid-area:result}.a-ledger{grid-area:ledger}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.card h2{font-family:'Gowun Batang',serif;font-size:18px;font-weight:700}
+.card .hint{color:var(--dim2);font-size:12.4px;margin-bottom:16px;line-height:1.55}
+
+/* ---------------- 결과 히어로 ---------------- */
+.a-result{
+  background:linear-gradient(168deg,#1B2029,#12161D 62%);
+  border:1px solid var(--line2);border-radius:var(--r);padding:22px 20px 20px;position:relative;overflow:hidden;
+}
+.a-result::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:3px;
+  background:linear-gradient(90deg,var(--seal),var(--gold),transparent);
+}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.hero-lead{font-size:13px;color:var(--dim);letter-spacing:.01em}
+.hero-lead b{color:var(--gold);font-weight:700}
+.hero-amt{
+  font-family:'Gowun Batang',serif;font-weight:700;
+  font-size:clamp(28px,8vw,58px);line-height:1.14;letter-spacing:-.02em;
+  margin:6px 0 2px;word-break:keep-all;
+}
+.hero-note{font-size:12.6px;color:var(--dim2)}
+.hero-note b{color:var(--jade);font-weight:600}
+.hero-note b.up{color:#FF8E7A}
+
+/* 도장 */
+.seal{
+  flex-shrink:0;width:74px;height:74px;border-radius:50%;
+  border:2.5px solid var(--seal);box-shadow:0 0 0 3px rgba(226,64,44,.13), inset 0 0 0 3px rgba(226,64,44,.18);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--seal);transform:rotate(-9deg);background:rgba(226,64,44,.06);
+  font-family:'Gowun Batang',serif;font-weight:700;
+  animation:stamp .45s cubic-bezier(.2,1.4,.4,1) both;
+}
+.seal .big{font-size:20px;line-height:1.05;letter-spacing:.04em}
+.seal .small{font-size:9.5px;letter-spacing:.16em;margin-top:3px;font-family:'IBM Plex Mono',monospace}
+@media(max-width:400px){.seal{width:62px;height:62px}.seal .big{font-size:17px}.seal .small{font-size:8.5px}}
+@keyframes stamp{from{opacity:0;transform:rotate(-9deg) scale(1.5)}to{opacity:1;transform:rotate(-9deg) scale(1)}}
+
+/* 절취선 */
+.perf{position:relative;height:1px;margin:20px -20px 18px;border-top:1px dashed var(--line2)}
+.perf::before,.perf::after{content:"";position:absolute;top:-7px;width:14px;height:14px;border-radius:50%;background:var(--bg)}
+.perf::before{left:-7px}.perf::after{right:-7px}
+
+/* ---------------- 타임라인 ---------------- */
+.track{display:flex;flex-direction:column;gap:2px}
+.row{
+  display:grid;grid-template-columns:1fr;gap:7px;padding:11px 0;
+  border-top:1px solid rgba(255,255,255,.045);
+}
+.row:first-child{border-top:0}
+@media(min-width:520px){.row{grid-template-columns:104px 1fr;gap:14px;align-items:center}}
+.yr{display:flex;align-items:baseline;gap:8px}
+@media(min-width:520px){.yr{flex-direction:column;align-items:flex-start;gap:2px}}
+.yr .y{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:var(--ink);letter-spacing:.01em}
+.yr .t{font-size:11.5px;color:var(--dim2)}
+.row.best .yr .y{color:var(--gold)}
+.row.best .yr .t{color:var(--gold);opacity:.75}
+.bar-area{position:relative}
+.bar-bg{height:40px;background:#0D1117;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.bar{height:100%;border-radius:8px;min-width:3px;transition:width .6s cubic-bezier(.16,.9,.25,1)}
+.bar.c-now{background:linear-gradient(90deg,#3E4C67,var(--slate))}
+.bar.c-up{background:linear-gradient(90deg,var(--seal-dim),var(--seal))}
+.bar.c-down{background:linear-gradient(90deg,#186B5A,var(--jade))}
+.bar-label{position:absolute;inset:0;display:flex;align-items:center;gap:8px;padding:0 13px;pointer-events:none}
+.bar-label .amt{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.bar-label .delta{font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:20px;background:rgba(0,0,0,.42);color:#fff;white-space:nowrap}
+.row.best .bar-bg{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 22px rgba(217,164,65,.16)}
+
+/* ---------------- 폼 ---------------- */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12.8px;font-weight:600;color:var(--dim);margin-bottom:7px}
+.field label .tag{color:var(--dim2);font-weight:400;font-size:11.5px}
+.inputrow{display:flex;align-items:center;gap:9px}
+input[type=number],select{
+  width:100%;background:#0D1117;border:1px solid var(--line);color:var(--ink);
+  font-size:16px;font-weight:600;padding:12px 13px;border-radius:11px;font-variant-numeric:tabular-nums;
+}
+select{font-size:15px;font-weight:500;cursor:pointer;appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--dim2) 50%),linear-gradient(135deg,var(--dim2) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 21px,calc(100% - 13px) 21px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;
+  padding-right:36px;}
+input:focus,select:focus{outline:none;border-color:var(--seal);background:#10141B}
+.unit{color:var(--dim2);font-size:13px;flex-shrink:0;min-width:24px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.check{display:flex;align-items:center;gap:10px;padding:12px 13px;background:#0D1117;border:1px solid var(--line);border-radius:11px;cursor:pointer;user-select:none;margin-bottom:14px}
+.check input{accent-color:var(--seal);width:18px;height:18px;cursor:pointer;flex-shrink:0}
+.check span{font-size:13.4px;color:var(--dim)}
+.check:has(input:checked) span{color:var(--ink)}
+.check:has(input:checked){border-color:rgba(226,64,44,.45)}
+
+/* ---------------- 명세서 ---------------- */
+.ledger-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.ledger-tabs::-webkit-scrollbar{display:none}
+.ledger-tabs button{
+  background:#0D1117;border:1px solid var(--line);color:var(--dim2);white-space:nowrap;
+  font-family:'IBM Plex Mono',monospace;font-size:12.5px;padding:7px 13px;border-radius:20px;cursor:pointer;
+}
+.ledger-tabs button[aria-pressed="true"]{background:rgba(226,64,44,.13);color:#FF9B8B;border-color:rgba(226,64,44,.45)}
+.ledger{border-left:2px solid var(--line2);padding-left:17px}
+.lrow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;position:relative}
+.lrow::before{content:"";position:absolute;left:-22px;top:15px;width:7px;height:1px;background:var(--line2)}
+.lrow .k{font-size:13.3px;color:var(--dim)}
+.lrow .k small{display:block;color:var(--dim2);font-size:11.3px;margin-top:1px;line-height:1.45}
+.lrow .v{font-family:'IBM Plex Mono',monospace;font-size:13.6px;color:var(--ink);white-space:nowrap}
+.lrow.minus .v{color:var(--jade)}
+.lrow.total{border-top:1px solid var(--line);margin-top:8px;padding-top:14px}
+.lrow.total::before{display:none}
+.lrow.total .k{font-weight:700;color:var(--ink);font-size:14.5px}
+.lrow.total .v{font-size:19px;font-weight:600;color:var(--gold)}
+.note{margin-top:15px;font-size:12.1px;color:var(--dim2);line-height:1.68;padding-top:13px;border-top:1px dashed var(--line)}
+.note b{color:var(--dim)}
+
+/* ---------------- 하단 독 ---------------- */
+.dock{
+  position:fixed;left:0;right:0;bottom:0;z-index:40;
+  background:rgba(13,17,23,.94);backdrop-filter:blur(16px);border-top:1px solid var(--line2);
+  padding:11px 16px calc(11px + env(safe-area-inset-bottom));
+  display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;
+}
+@media(min-width:940px){.dock{display:none!important}}
+.dock.hide{display:none!important}
+.dock .l{min-width:0}
+.dock .l .cap{font-size:11px;color:var(--dim2);font-family:'IBM Plex Mono',monospace;letter-spacing:.08em}
+.dock .l .v{font-size:17px;font-weight:700;color:var(--ink);font-family:'Gowun Batang',serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dock .r{flex-shrink:0;font-size:12.5px;font-weight:600;color:var(--seal);border:1px solid rgba(226,64,44,.45);background:rgba(226,64,44,.1);padding:8px 13px;border-radius:20px}
+
+/* ---------------- 변경 내용 ---------------- */
+.chg{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:12px;background:var(--surface)}
+.chg > summary{padding:16px 18px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.chg > summary::-webkit-details-marker{display:none}
+.chg > summary .t{font-family:'Gowun Batang',serif;font-size:16.5px;font-weight:700}
+.chg > summary .m{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--seal);border:1px solid rgba(226,64,44,.35);padding:3px 9px;border-radius:5px;white-space:nowrap;flex-shrink:0}
+.chg[open] > summary{border-bottom:1px solid var(--line);background:var(--surface2)}
+.chg .body{padding:14px 18px 20px}
+.chg h3{font-size:13.8px;font-weight:700;margin:20px 0 5px}
+.chg p{font-size:13.4px;color:var(--dim);margin-bottom:10px;line-height:1.7}
+.chg p b{color:var(--ink);font-weight:600}
+.ba{display:grid;grid-template-columns:1fr;gap:10px;margin:10px 0 4px}
+@media(min-width:640px){.ba{grid-template-columns:1fr 1fr}}
+.ba > div{border-radius:11px;padding:13px 15px;font-size:13.2px;line-height:1.62}
+.ba .before{background:rgba(126,144,178,.07);border:1px solid rgba(126,144,178,.24)}
+.ba .after{background:rgba(226,64,44,.07);border:1px solid rgba(226,64,44,.3)}
+.ba .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;margin-bottom:8px}
+.ba .before .lbl{color:var(--slate)}
+.ba .after .lbl{color:var(--seal)}
+.ba ul{list-style:none}
+.ba li{padding-left:11px;position:relative;color:var(--dim)}
+.ba li::before{content:"·";position:absolute;left:0;color:var(--dim2)}
+.ba li b{color:var(--ink);font-weight:600}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:8px -18px;padding:0 18px}
+table{width:100%;border-collapse:collapse;font-size:12.6px;min-width:420px}
+th,td{padding:8px 9px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--dim2);font-weight:600;font-size:11px;font-family:'IBM Plex Mono',monospace}
+td:first-child,th:first-child{text-align:left;color:var(--dim)}
+td{font-family:'IBM Plex Mono',monospace;color:var(--ink)}
+td.hl{color:var(--seal);font-weight:600}
+.tl-when{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);
+  background:rgba(217,164,65,.1);border:1px solid rgba(217,164,65,.3);padding:3px 9px;border-radius:5px;margin-top:10px}
+
+footer{margin-top:36px;padding:20px 0 10px;border-top:1px solid var(--line);color:var(--dim2);font-size:12px;line-height:1.75}
+
+.toast{
+  position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(14px);
+  background:var(--ink);color:#0A0C10;font-size:13.5px;font-weight:700;padding:11px 20px;border-radius:24px;
+  opacity:0;pointer-events:none;transition:.25s;z-index:60;white-space:nowrap;
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="hdr-bg"><div class="wrap"><header>
+  <div class="topbar">
+    <div class="eyebrow">부동산 세제 개정안 · 국회 심사 중</div>
+    <button class="sharebtn" id="share">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+      내 조건 공유
+    </button>
+  </div>
+  <h1 class="serif">세금이 얼마인지보다<br><em>언제가 유리한지</em>가<br>바뀌었습니다.</h1>
+  <p class="sub">이번 개편은 한 번에 시행되지 않습니다. 현행 · 2027 · 2028 · 2029년 이후로 규칙이 계단처럼 바뀌고, 다주택 양도세 중과 완화는 <b>2027~2028년 2년만</b> 열립니다. 그래서 이 계산기는 숫자 하나가 아니라 <b>네 시점을 나란히</b> 보여줍니다.</p>
+  <div class="warn"><b>아직 법이 아닙니다.</b> 개정안은 국회 심사 중이며, 올해 내는 세금은 현행법 기준입니다. 양도세 장기보유특별공제는 11월 조세소위에서 추가 논의될 예정이라 숫자가 바뀔 수 있습니다. 실제 신고·납부는 세무 전문가나 홈택스 모의계산으로 확인하세요.</div>
+</header></div></div>
+
+<div class="tabwrap"><nav class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-tab="hold">보유세 (종부세)</button>
+  <button role="tab" aria-selected="false" data-tab="sell">양도세</button>
+  <button role="tab" aria-selected="false" data-tab="diff">무엇이 바뀌나</button>
+</nav></div>
+
+<div class="wrap">
+
+<!-- ============ 종부세 ============ -->
+<section class="panel on" id="p-hold"><div class="cols">
+
+  <div class="a-result" id="h-result">
+    <div class="hero-top">
+      <div style="min-width:0">
+        <div class="hero-lead" id="h-lead"></div>
+        <div class="hero-amt serif" id="h-amt">—</div>
+        <div class="hero-note" id="h-note2"></div>
+      </div>
+      <div id="h-seal"></div>
+    </div>
+    <div class="perf"></div>
+    <div class="track" id="h-track"></div>
+  </div>
+
+  <div class="card a-input">
+    <h2>보유 상황</h2>
+    <p class="hint">매년 6월 1일 기준 소유 현황. 금액은 <b>공시가격</b>입니다.</p>
+    <div class="field">
+      <label>보유 유형</label>
+      <select id="h-type">
+        <option value="own1">1세대 1주택 · 내가 살고 있음</option>
+        <option value="non1">1세대 1주택 · 살지 않음 (임대·공실)</option>
+        <option value="multi2">2주택</option>
+        <option value="multi3">3주택 이상</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>공시가격 합계</label>
+      <div class="inputrow"><input type="number" id="h-price" value="18" step="0.5" min="0" inputmode="decimal"><span class="unit">억원</span></div>
+    </div>
+    <div id="h-joint-wrap">
+      <label class="check"><input type="checkbox" id="h-joint"><span>부부 공동명의</span></label>
+    </div>
+    <div class="field" id="h-share-wrap" style="display:none">
+      <label>내 지분 <span class="tag">나머지는 배우자 지분</span></label>
+      <div class="inputrow"><input type="number" id="h-share" value="50" min="1" max="99" step="1" inputmode="numeric"><span class="unit">%</span></div>
+    </div>
+    <div class="field" id="h-resid-wrap" style="display:none">
+      <label>그중 내가 사는 집 <span class="tag">2027년 이후 공제 계산용</span></label>
+      <div class="inputrow"><input type="number" id="h-resid" value="8" step="0.5" min="0" inputmode="decimal"><span class="unit">억원</span></div>
+    </div>
+    <div id="h-adj-wrap" style="display:none">
+      <label class="check"><input type="checkbox" id="h-adj"><span>조정대상지역 주택을 보유 중</span></label>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>보유 기간</label>
+        <div class="inputrow"><input type="number" id="h-hold" value="12" min="0" max="60" inputmode="numeric"><span class="unit">년</span></div></div>
+      <div class="field"><label>거주 기간</label>
+        <div class="inputrow"><input type="number" id="h-live" value="12" min="0" max="60" inputmode="numeric"><span class="unit">년</span></div></div>
+    </div>
+    <div class="field"><label>나이 <span class="tag">60세부터 세액공제</span></label>
+      <div class="inputrow"><input type="number" id="h-age" value="58" min="19" max="110" inputmode="numeric"><span class="unit">세</span></div></div>
+  </div>
+
+  <div class="card a-ledger">
+    <h2>계산 명세서</h2>
+    <p class="hint">숫자가 어떻게 나왔는지 단계별로 봅니다.</p>
+    <div class="ledger-tabs" id="h-ltabs"></div>
+    <div class="ledger" id="h-ledger"></div>
+    <div class="note" id="h-note"></div>
+  </div>
+</div></section>
+
+<!-- ============ 양도세 ============ -->
+<section class="panel" id="p-sell"><div class="cols">
+
+  <div class="a-result" id="s-result">
+    <div class="hero-top">
+      <div style="min-width:0">
+        <div class="hero-lead" id="s-lead"></div>
+        <div class="hero-amt serif" id="s-amt">—</div>
+        <div class="hero-note" id="s-note2"></div>
+      </div>
+      <div id="s-seal"></div>
+    </div>
+    <div class="perf"></div>
+    <div class="track" id="s-track"></div>
+  </div>
+
+  <div class="card a-input">
+    <h2>매도 조건</h2>
+    <p class="hint">잔금일(양도일)이 속한 연도로 규칙이 갈립니다.</p>
+    <div class="field">
+      <label>보유 유형</label>
+      <select id="s-type">
+        <option value="one">1세대 1주택</option>
+        <option value="two">2주택</option>
+        <option value="three">3주택 이상</option>
+      </select>
+    </div>
+    <div id="s-adj-wrap" style="display:none">
+      <label class="check"><input type="checkbox" id="s-adj" checked><span>파는 집이 조정대상지역에 있음</span></label>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>양도가액 <span class="tag">파는 값</span></label>
+        <div class="inputrow"><input type="number" id="s-sell" value="22" step="0.5" min="0" inputmode="decimal"><span class="unit">억원</span></div></div>
+      <div class="field"><label>취득가액 <span class="tag">산 값</span></label>
+        <div class="inputrow"><input type="number" id="s-buy" value="9" step="0.5" min="0" inputmode="decimal"><span class="unit">억원</span></div></div>
+    </div>
+    <div class="field"><label>필요경비 <span class="tag">취득세·중개비·자본적지출</span></label>
+      <div class="inputrow"><input type="number" id="s-cost" value="4000" step="100" min="0" inputmode="numeric"><span class="unit">만원</span></div></div>
+    <div class="grid2">
+      <div class="field"><label>보유 기간</label>
+        <div class="inputrow"><input type="number" id="s-hold" value="12" min="0" max="60" inputmode="numeric"><span class="unit">년</span></div></div>
+      <div class="field"><label>거주 기간</label>
+        <div class="inputrow"><input type="number" id="s-live" value="12" min="0" max="60" inputmode="numeric"><span class="unit">년</span></div></div>
+    </div>
+  </div>
+
+  <div class="card a-ledger">
+    <h2>계산 명세서</h2>
+    <p class="hint">지방소득세(양도세의 10%)를 포함한 금액입니다.</p>
+    <div class="ledger-tabs" id="s-ltabs"></div>
+    <div class="ledger" id="s-ledger"></div>
+    <div class="note" id="s-note"></div>
+  </div>
+</div></section>
+
+<!-- ============ 변경 내용 ============ -->
+<section class="panel" id="p-diff">
+
+  <details class="chg" open style="border-color:rgba(226,64,44,.4)">
+    <summary style="background:rgba(226,64,44,.1)"><span class="t serif">한눈에 보기</span><span class="m">현행 → 개정안</span></summary>
+    <div class="body">
+      <p>왼쪽이 <b>지금 적용되는 법</b>, 오른쪽이 <b>국회에서 심사 중인 개정안</b>입니다. 아직 법이 아니므로 올해 내는 세금은 왼쪽 기준입니다.</p>
+      <div class="tscroll"><table>
+        <thead><tr><th>항목</th><th>지금 (현행법)</th><th>개정안 (심사 중)</th></tr></thead>
+        <tbody>
+          <tr><td>1주택 기본공제</td><td>12억 (거주 무관)</td><td class="hl">거주 14억 / 비거주 12억</td></tr>
+          <tr><td>공동명의 1주택</td><td>각 9억 (합 18억)</td><td class="hl">거주 각 9억 / 비거주 각 6억</td></tr>
+          <tr><td>다주택 기본공제</td><td>9억</td><td class="hl">4억 + 5억 × 거주주택 비중</td></tr>
+          <tr><td>공정시장가액비율</td><td>60%</td><td class="hl">70% ('28~ 3주택 등 80%)</td></tr>
+          <tr><td>종부세 세율 기준</td><td>주택 수</td><td class="hl">주택 가액 ('28 일원화)</td></tr>
+          <tr><td>1주택 세액공제</td><td>보유 기간</td><td class="hl">거주 기간 + 금액 한도 신설</td></tr>
+          <tr><td>세부담 상한</td><td>150%</td><td>150% (변경 없음)</td></tr>
+          <tr><td>양도세 장특공제</td><td>보유 4% + 거주 4%</td><td class="hl">거주 8% ('29~) + 한도 신설</td></tr>
+          <tr><td>양도세 기본공제</td><td>연 250만원</td><td class="hl">연 2,500만원 (조건 충족 시)</td></tr>
+          <tr><td>다주택 양도세 중과</td><td>+20 / +30%p</td><td class="hl">'27~'28 한시 완화</td></tr>
+          <tr><td>비사업용 토지</td><td>기본세율 +10%p</td><td class="hl">+20%p, 장특공제 배제</td></tr>
+        </tbody></table></div>
+      <h3>언제 법이 되나</h3>
+      <p>개정안은 2026년 9월 3일 국회에 제출돼 정기국회에서 심사 중입니다. 양도세 장기보유특별공제는 10월 국정감사 이후 <b>11월 조세소위원회</b>에서 본격 논의될 예정이라, 아래 숫자는 <b>한 번 더 바뀔 수 있습니다.</b> 통과되더라도 항목마다 시행 시점이 2027년·2028년·2029년으로 갈립니다.</p>
+    </div>
+  </details>
+
+  <details class="chg" open>
+    <summary><span class="t serif">종부세 — 기본공제</span><span class="m">2027</span></summary>
+    <div class="body">
+      <p>지금은 1주택이면 실제로 사는지와 무관하게 12억 원을 빼줍니다. 개정안은 <b>실거주자에게만 2억을 더 얹어줍니다.</b> 비거주 1주택은 현행과 같은 12억이라 손해는 아니지만, 실거주자와의 격차가 벌어집니다. 다주택자는 처음으로 기본공제가 생기는 대신, 실제 사는 집이 차지하는 비중만큼만 더 받습니다.</p>
+      <div class="ba">
+        <div class="before"><div class="lbl">지금</div><ul><li>1세대 1주택 <b>12억원</b> (거주 무관)</li><li>그 외 <b>9억원</b></li><li>부부 공동명의 각 <b>9억</b> (합 18억)</li></ul></div>
+        <div class="after"><div class="lbl">개정안</div><ul><li>1주택 거주 <b>14억원</b> (시가 약 20억)</li><li>1주택 비거주 <b>12억원</b> (현행과 동일)</li><li>다주택 <b>4억 + 5억 × (거주주택가액 ÷ 합계)</b></li><li>공동명의 거주 각 9억 / 비거주 각 <b>6억</b></li></ul></div>
+      </div>
+      <h3>공동명의는 신고 방식을 고를 수 있습니다</h3>
+      <p>부부 공동명의 1주택자는 <b>각자 지분대로 따로 내는 방식</b>과 <b>1세대 1주택 특례를 신청해 한 사람이 단독 소유처럼 내는 방식</b> 중 유리한 쪽을 고를 수 있습니다. 각자 과세는 1인당 공제를 두 번 받지만 연령·거주 세액공제를 못 받고, 특례는 그 반대입니다. 계산기가 두 방식을 모두 계산해 유리한 쪽을 적용합니다.</p>
+      <span class="tl-when">2027.1.1. 이후 납세의무 성립분</span>
+    </div>
+  </details>
+
+  <details class="chg">
+    <summary><span class="t serif">종부세 — 세율</span><span class="m">2027~2028</span></summary>
+    <div class="body">
+      <p>세율 기준이 <b>'몇 채 가졌나'에서 '얼마짜리를 가졌나'로</b> 바뀝니다. 2028년부터는 주택 수와 무관하게 하나의 세율표를 씁니다. 6~12억 구간은 1.0% → 1.3%로 오릅니다.</p>
+      <div class="tscroll"><table>
+        <thead><tr><th>과세표준</th><th>현행 1·2주택</th><th>현행 3주택+</th><th>'27 1·2주택</th><th>'28~ 전체</th></tr></thead>
+        <tbody>
+          <tr><td>3억 이하</td><td>0.5%</td><td>0.5%</td><td>0.5%</td><td>0.5%</td></tr>
+          <tr><td>3~6억</td><td>0.7%</td><td>0.7%</td><td>0.7%</td><td>0.7%</td></tr>
+          <tr><td>6~12억</td><td>1.0%</td><td>1.0%</td><td class="hl">1.3%</td><td class="hl">1.3%</td></tr>
+          <tr><td>12~25억</td><td>1.3%</td><td>2.0%</td><td class="hl">1.5%</td><td class="hl">2.0%</td></tr>
+          <tr><td>25~50억</td><td>1.5%</td><td>3.0%</td><td class="hl">2.0%</td><td class="hl">3.0%</td></tr>
+          <tr><td>50~94억</td><td>2.0%</td><td>4.0%</td><td class="hl">2.7%</td><td class="hl">4.0%</td></tr>
+          <tr><td>94억 초과</td><td>2.7%</td><td>5.0%</td><td class="hl">3.5%</td><td class="hl">5.0%</td></tr>
+        </tbody></table></div>
+      <h3>공정시장가액비율도 오릅니다</h3>
+      <p>공제를 뺀 금액에 곱하는 비율입니다. 이게 오르면 세율표가 그대로여도 세금이 늘어납니다.</p>
+      <div class="ba">
+        <div class="before"><div class="lbl">지금</div><ul><li>전부 <b>60%</b></li></ul></div>
+        <div class="after"><div class="lbl">개정안</div><ul><li>1주택·지방 1·2주택 <b>2027년부터 70%</b></li><li>3주택 이상·조정지역 <b>2027년 70% → 2028년 80%</b></li></ul></div>
+      </div>
+      <span class="tl-when">2027.1.1. 이후 납세의무 성립분</span>
+    </div>
+  </details>
+
+  <details class="chg">
+    <summary><span class="t serif">종부세 — 세액공제</span><span class="m">2027</span></summary>
+    <div class="body">
+      <p>1주택자의 <b>보유 기간</b> 공제가 <b>거주 기간</b> 공제로 갈아탑니다. 오래 갖고만 있던 사람은 혜택이 줄고, 오래 산 사람은 유지됩니다. 지금은 없던 <b>금액 한도</b>도 새로 생깁니다.</p>
+      <div class="ba">
+        <div class="before"><div class="lbl">지금</div><ul><li>보유 5년 20% / 10년 40% / 15년 50%</li><li>연령 60세 20% / 65세 30% / 70세 40%</li><li>합산 최대 80%, <b>금액 한도 없음</b></li></ul></div>
+        <div class="after"><div class="lbl">개정안</div><ul><li>2027년: 보유공제 <b>절반</b>과 거주공제 중 <b>높은 쪽</b></li><li>2028년~: <b>거주</b> 5년 20% / 10년 40% / 15년 50%</li><li>연령 공제는 그대로</li><li>금액 한도 <b>2027년 800만 → 2028년 600만</b></li></ul></div>
+      </div>
+      <h3>세부담 상한은 그대로 150%</h3>
+      <p>작년 보유세의 몇 배까지 낼 수 있는지 정하는 안전장치입니다. 개정안에서도 <b>현행 150%가 유지</b>되므로, 세율과 공정시장가액비율이 오르더라도 한 해 보유세가 작년의 1.5배를 넘지는 않습니다.</p>
+      <span class="tl-when">2027.1.1. 이후 납세의무 성립분</span>
+    </div>
+  </details>
+
+  <details class="chg">
+    <summary><span class="t serif">양도세 — 장기보유특별공제</span><span class="m">2028~2029</span></summary>
+    <div class="body">
+      <p>이름부터 바뀝니다. 주택은 <b>'장기거주 소득공제'</b>, 토지·건물은 '장기보유 소득공제'로 나뉩니다. 주택은 <b>보유했다는 사실만으로는 공제를 못 받게 됩니다.</b> 2027년은 현행 그대로이고 2028년부터 단계적으로 넘어갑니다.</p>
+      <div class="tscroll"><table>
+        <thead><tr><th>구분</th><th>~2027</th><th>2028</th><th>2029~</th></tr></thead>
+        <tbody>
+          <tr><td>1세대 1주택</td><td>거주 4% + 보유 4%</td><td class="hl">거주 6% + 보유 2%</td><td class="hl">거주 8%</td></tr>
+          <tr><td>1주택 최대</td><td>80%</td><td>80%</td><td>80%</td></tr>
+          <tr><td>다주택(비조정)</td><td>보유 2% (최대 30%)</td><td class="hl">보유 1% 또는 거주 2%</td><td class="hl">거주 2% (최대 30%)</td></tr>
+          <tr><td>공제 금액 한도</td><td>없음</td><td class="hl">20억원</td><td class="hl">10억원</td></tr>
+        </tbody></table></div>
+      <p>조정대상지역 주택을 파는 다주택자는 지금도 장특공제가 배제되며, 개정 후 거주공제도 배제됩니다.</p>
+      <h3>10년 이상 거주한 1주택은 기본공제가 10배</h3>
+      <div class="ba">
+        <div class="before"><div class="lbl">지금</div><ul><li>양도세 기본공제 <b>연 250만원</b></li></ul></div>
+        <div class="after"><div class="lbl">개정안</div><ul><li><b>연 2,500만원</b></li><li>조건: 10년 이상 거주 + 양도가액 30억 이하 1주택</li><li>2027.1.1. 양도분부터</li></ul></div>
+      </div>
+      <span class="tl-when">장특공제 개편은 2028.1.1. 이후 양도분</span>
+    </div>
+  </details>
+
+  <details class="chg">
+    <summary><span class="t serif">양도세 — 다주택 중과 한시 완화</span><span class="m">2027~2028 한정</span></summary>
+    <div class="body">
+      <p>이번 개편에서 <b>시한이 가장 짧은 항목</b>입니다. 보유세를 올리는 대신 팔 기회를 주겠다는 취지로 조정대상지역 주택(2년 이상 보유)의 중과세율을 2년간만 낮춥니다. 2029년에 원래대로 돌아갑니다.</p>
+      <div class="tscroll"><table>
+        <thead><tr><th>중과 가산세율</th><th>현행</th><th>2027</th><th>2028</th><th>2029~</th></tr></thead>
+        <tbody>
+          <tr><td>2주택자</td><td>+20%p</td><td class="hl">+5%p</td><td class="hl">+10%p</td><td>+20%p</td></tr>
+          <tr><td>3주택 이상</td><td>+30%p</td><td class="hl">+10%p</td><td class="hl">+15%p</td><td>+30%p</td></tr>
+        </tbody></table></div>
+      <p>2026년 중 중과를 적용받아 판 경우에도 2027년 1월 1일 이후 신고할 때 완화된 세율을 적용받을 수 있는 특례가 있습니다(2년 이상 보유분 한정).</p>
+      <span class="tl-when">2027.1.1. 이후 양도분</span>
+    </div>
+  </details>
+
+  <details class="chg">
+    <summary><span class="t serif">일시적 2주택 · 거주기간 인정</span><span class="m">2026.10.1.</span></summary>
+    <div class="body">
+      <p>조정대상지역에서 갈아탈 때 종전 주택을 팔아야 하는 기간이 <b>3년에서 2년으로 줄어듭니다.</b> 2026년 8월 4일 이후 새 집을 취득한 경우부터 적용되고, 8월 3일 이전에 취득했거나 계약금을 낸 경우는 종전 규정을 따릅니다.</p>
+      <h3>못 살았어도 살았다고 쳐주는 경우</h3>
+      <p>거주 중심으로 제도가 바뀌면서, 어쩔 수 없이 못 산 기간을 거주로 인정해 주는 장치가 함께 들어왔습니다.</p>
+      <div class="ba"><div class="after" style="grid-column:1/-1"><div class="lbl">인정 대상</div><ul>
+        <li>취학·전근·1년 이상 치료·학교폭력 전학·해외체류·부모봉양 등으로 다른 시·군 이전 <b>(최장 3년)</b></li>
+        <li>재개발·재건축 신축주택은 <b>공사기간의 1/2</b></li>
+        <li>지방저가주택·인구감소지역 주택 등 특례주택의 보유기간</li>
+        <li>등록임대주택(건설임대, 비조정 매입임대)의 임대기간 <b>연 2%, 최대 30%</b></li>
+      </ul></div></div>
+    </div>
+  </details>
+
+  <details class="chg">
+    <summary><span class="t serif">토지 — 비사업용 토지 과세 강화</span><span class="m">2028</span></summary>
+    <div class="body">
+      <div class="ba">
+        <div class="before"><div class="lbl">지금</div><ul><li>양도세 기본세율 <b>+10%p</b></li><li>법인 추가과세 <b>10%</b></li><li>장특공제 최대 30% 적용</li><li>종합합산토지 최고세율 3%</li></ul></div>
+        <div class="after"><div class="lbl">개정안</div><ul><li>양도세 기본세율 <b>+20%p</b></li><li>법인 추가과세 <b>20%</b></li><li>장특공제 <b>전면 배제</b></li><li>종합합산토지 최고세율 <b>4%</b></li></ul></div>
+      </div>
+      <span class="tl-when">2028.1.1. 이후 양도분 / 종부세는 2028년 성립분</span>
+    </div>
+  </details>
+
+</section>
+
+<footer>
+  자료: 2026년 9월 3일 국회 제출 세법 개정안 및 현행 종합부동산세법·소득세법. 정보 제공용 시뮬레이터이며 세무 자문이 아닙니다.<br>
+  종부세는 재산세 중복분 공제와 세부담 상한을 반영하지 않아 실제 고지세액보다 높게 나올 수 있습니다.
+</footer>
+</div>
+
+<div class="dock" id="dock">
+  <div class="l"><div class="cap" id="dock-cap">RESULT</div><div class="v" id="dock-val">—</div></div>
+  <div class="r">결과 보기</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+var 억=1e8, 만=1e4;
+var $=function(s){return document.querySelector(s)}, $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+
+function won(n){
+  n=Math.round(n);
+  if(n<=0) return "0원";
+  if(n>=억){ var e=Math.floor(n/억), m=Math.round((n%억)/만);
+    return m? e+"억 "+m.toLocaleString()+"만원" : e+"억원"; }
+  if(n>=만) return Math.round(n/만).toLocaleString()+"만원";
+  return n.toLocaleString()+"원";
+}
+function prog(base, br, add){ add=add||0; var t=0;
+  for(var i=0;i<br.length;i++){ var lo=br[i][0],hi=br[i][1],r=br[i][2];
+    if(base<=lo) break; t+=(Math.min(base,hi)-lo)*(r+add); } return t; }
+
+/* ===== 종부세 ===== */
+var JB={
+  cur12:[[0,3*억,.005],[3*억,6*억,.007],[6*억,12*억,.010],[12*억,25*억,.013],[25*억,50*억,.015],[50*억,94*억,.020],[94*억,Infinity,.027]],
+  cur3 :[[0,3*억,.005],[3*억,6*억,.007],[6*억,12*억,.010],[12*억,25*억,.020],[25*억,50*억,.030],[50*억,94*억,.040],[94*억,Infinity,.050]],
+  n27  :[[0,3*억,.005],[3*억,6*억,.007],[6*억,12*억,.013],[12*억,25*억,.015],[25*억,50*억,.020],[50*억,94*억,.027],[94*억,Infinity,.035]],
+  n3   :[[0,3*억,.005],[3*억,6*억,.007],[6*억,12*억,.013],[12*억,25*억,.020],[25*억,50*억,.030],[50*억,94*억,.040],[94*억,Infinity,.050]]
+};
+var ageR=function(a){return a>=70?.4:a>=65?.3:a>=60?.2:0};
+var stepR=function(y){return y>=15?.5:y>=10?.4:y>=5?.2:0};
+
+/* 공동명의 "각자 과세" — 지분별로 따로 계산, 세액공제 없음 */
+function calcJointSep(era, p){
+  var L=[], live=(p.type==="own1");
+  // 1인당 기본공제: 현행 9억 / 제출안 거주 9억·비거주 6억
+  var perDed = era==="now" ? 9*억 : (live ? 9*억 : 6*억);
+  var dedNote = era==="now" ? "현행 1인당 9억"
+    : (live ? "거주 공동명의 1인당 9억" : "비거주 공동명의 1인당 6억");
+  var fair = era==="now" ? .60 : .70;
+  var table = era==="now" ? JB.cur12 : (era==="y27" ? JB.n27 : JB.n3);
+  var sh = [p.share/100, 1-p.share/100];
+  var names = ["본인 지분 "+p.share+"%", "배우자 지분 "+(100-p.share)+"%"];
+  var gross=0, rows=[];
+  for(var i=0;i<2;i++){
+    var mine = p.price*sh[i];
+    var base = Math.max(0, mine-perDed)*fair;
+    var t = prog(base, table);
+    gross += t;
+    rows.push({k:names[i], s:won(mine)+" − 공제 "+won(perDed)+" → 과표 "+won(base), v:won(t)});
+  }
+  var nong = gross*.2;
+  L.push({k:"공시가격 합계", v:won(p.price)});
+  L.push({k:"1인당 기본공제", s:dedNote, v:"− "+won(perDed)+" ×2"});
+  rows.forEach(function(r){L.push(r)});
+  L.push({k:"세액공제", s:"각자 과세는 연령·거주 공제를 받을 수 없습니다", v:"− 0원", minus:1});
+  L.push({k:"농어촌특별세", s:"결정세액의 20%", v:"+ "+won(nong)});
+  L.push({k:"부부 합산 납부액", v:won(gross+nong), total:1});
+  return {total:gross+nong, ledger:L};
+}
+
+function calcJB(era, p){
+  if(p.joint && (p.type==="own1"||p.type==="non1")){
+    var sep = calcJointSep(era, p);        // 각자 과세
+    var spec = calcSingleJB(era, p);       // 1세대 1주택 특례 신청
+    var useSep = sep.total <= spec.total;
+    var win = useSep ? sep : spec;
+    var head = {k:"신고 방식 선택", s:"각자 과세 "+won(sep.total)+" vs 1주택 특례 "+won(spec.total)
+      +" → "+(useSep?"각자 과세":"특례 신청")+"가 유리", v:""};
+    return {total:win.total, ledger:[head].concat(win.ledger), joint:true};
+  }
+  return calcSingleJB(era, p);
+}
+
+function calcSingleJB(era, p){
+  var one=(p.type==="own1"||p.type==="non1"), three=(p.type==="multi3"), L=[];
+  var ded, dedNote;
+  if(era==="now"){ ded=one?12*억:9*억; dedNote=one?"1세대 1주택 12억":"9억"; }
+  else if(p.type==="own1"){ ded=14*억; dedNote="거주 1주택 14억"; }
+  else if(p.type==="non1"){ ded=12*억; dedNote="비거주 1주택 12억 (거주 시 14억)"; }
+  else { var r=p.price>0?Math.min(p.resid,p.price)/p.price:0; ded=4*억+5*억*r; dedNote="4억 + 5억×"+(r*100).toFixed(0)+"%"; }
+
+  var gate = era==="now" ? (one?12*억:9*억) : (one?14*억:9*억);
+  var taxable = p.price > gate;
+  var fair = era==="now" ? .60 : era==="y27" ? .70 : ((three||(p.adj&&!one))?.80:.70);
+  var base = taxable? Math.max(0,p.price-ded)*fair : 0;
+  var table = era==="now" ? (three?JB.cur3:JB.cur12) : era==="y27" ? (three?JB.n3:JB.n27) : JB.n3;
+  var gross = prog(base, table);
+
+  var credit=0, cNote="1세대 1주택자만 해당";
+  if(one){
+    var a=ageR(p.age), hr, hL;
+    if(era==="now"){ hr=stepR(p.hold); hL="보유 "+p.hold+"년 "+(hr*100)+"%"; }
+    else if(era==="y27"){ var h2=stepR(p.hold)/2, lr=stepR(p.live);
+      hr=Math.max(h2,lr); hL = h2>=lr ? "보유공제의 절반 "+(h2*100)+"%" : "거주 "+p.live+"년 "+(lr*100)+"%"; }
+    else { hr=stepR(p.live); hL="거주 "+p.live+"년 "+(hr*100)+"%"; }
+    var rate=Math.min(.8, a+hr); credit=gross*rate;
+    var cap = era==="now"?Infinity: era==="y27"?800*만:600*만;
+    var capped=Math.min(credit,cap);
+    cNote="연령 "+p.age+"세 "+(a*100)+"% + "+hL+" = "+(rate*100).toFixed(0)+"%"+(capped<credit?" · 한도 "+won(cap):"");
+    credit=capped;
+  }
+  var dec=Math.max(0,gross-credit), nong=dec*.2, total=dec+nong;
+
+  L.push({k:"공시가격 합계",v:won(p.price)});
+  L.push({k:"기본공제",s:dedNote,v:"− "+won(Math.min(ded,p.price)),minus:1});
+  L.push({k:"공정시장가액비율",s:era==="now"?"현행 60%":(fair*100).toFixed(0)+"%로 인상",v:"× "+(fair*100).toFixed(0)+"%"});
+  L.push({k:"과세표준",v:won(base)});
+  L.push({k:"산출세액",s:era==="y28"?"주택 수 무관 단일 세율표":(three?"3주택 이상 세율":"1·2주택 세율"),v:won(gross)});
+  L.push({k:"세액공제",s:cNote,v:"− "+won(credit),minus:1});
+  L.push({k:"농어촌특별세",s:"결정세액의 20%",v:"+ "+won(nong)});
+  L.push({k:"연간 납부액",v:won(total),total:1});
+  return {total:total, ledger:L};
+}
+
+/* ===== 양도세 ===== */
+var INC=[[0,14e6,.06],[14e6,50e6,.15],[50e6,88e6,.24],[88e6,150e6,.35],[150e6,300e6,.38],[300e6,500e6,.40],[500e6,1000e6,.42],[1000e6,Infinity,.45]];
+function calcYD(era,p){
+  var one=p.type==="one", L=[], mn=Math.min;
+  var gain=Math.max(0,p.sell-p.buy-p.cost);
+  L.push({k:"양도차익",s:won(p.sell)+" − "+won(p.buy)+" − 경비 "+won(p.cost),v:won(gain)});
+
+  var taxGain=gain, ok1 = one && p.hold>=2 && (!p.adj || p.live>=2);
+  if(ok1){
+    if(p.sell<=12*억){
+      L.push({k:"1세대 1주택 비과세",s:"양도가액 12억 이하 전액 비과세",v:"− "+won(gain),minus:1});
+      L.push({k:"납부할 세금",v:"0원",total:1});
+      return {total:0,ledger:L};
+    }
+    taxGain=gain*(p.sell-12*억)/p.sell;
+    L.push({k:"12억 초과분만 과세",s:"양도차익 × ("+won(p.sell)+"−12억) ÷ "+won(p.sell),v:won(taxGain)});
+  } else if(one){
+    L.push({k:"비과세 미적용",s:p.hold<2?"보유 2년 미만":"조정대상지역 2년 거주요건 미충족",v:"—"});
+  }
+
+  var rate=0,rNote="",cap=Infinity;
+  if(one && ok1){
+    if(p.live<2){ rate=mn(.3,.02*mn(p.hold,15)); rNote="거주 2년 미만 → 일반공제 보유 "+mn(p.hold,15)+"년×2%"; }
+    else if(era==="now"||era==="y27"){ rate=mn(.4,.04*mn(p.hold,10))+mn(.4,.04*mn(p.live,10)); rNote="보유 "+mn(p.hold,10)+"년×4% + 거주 "+mn(p.live,10)+"년×4%"; }
+    else if(era==="y28"){ rate=mn(.8,.06*mn(p.live,10)+.02*mn(p.hold,10)); rNote="거주 "+mn(p.live,10)+"년×6% + 보유 "+mn(p.hold,10)+"년×2%"; cap=20*억; }
+    else { rate=mn(.8,.08*mn(p.live,10)); rNote="거주 "+mn(p.live,10)+"년×8%"; cap=10*억; }
+  } else if(one){
+    rate=p.hold>=3?mn(.3,.02*mn(p.hold,15)):0; rNote=p.hold>=3?"보유 "+mn(p.hold,15)+"년×2%":"보유 3년 미만 · 공제 없음";
+  } else {
+    if(p.adj){ rate=0; rNote="조정대상지역 다주택 · 공제 배제"; }
+    else if(era==="now"||era==="y27"){ rate=p.hold>=3?mn(.3,.02*mn(p.hold,15)):0; rNote=p.hold>=3?"보유 "+mn(p.hold,15)+"년×2%":"보유 3년 미만"; }
+    else if(era==="y28"){ var A=mn(.15,.01*mn(p.hold,15)),B=mn(.3,.02*mn(p.live,15));
+      rate=Math.max(A,B); rNote=B>=A?"거주 "+mn(p.live,15)+"년×2%":"보유 "+mn(p.hold,15)+"년×1%"; cap=20*억; }
+    else { rate=mn(.3,.02*mn(p.live,15)); rNote="거주 "+mn(p.live,15)+"년×2%"; cap=10*억; }
+  }
+  var ltd=Math.min(taxGain*rate,cap);
+  L.push({k:"장기보유특별공제",s:rNote+(rate>0?" = "+(rate*100).toFixed(0)+"%":"")+(cap<Infinity?" · 한도 "+won(cap):""),v:"− "+won(ltd),minus:1});
+
+  var income=Math.max(0,taxGain-ltd);
+  var basic=250*만, bN="연 250만원";
+  if(era!=="now" && one && p.live>=10 && p.sell<=30*억){ basic=2500*만; bN="10년 이상 거주·30억 이하 1주택 → 연 2,500만원"; }
+  L.push({k:"양도소득 기본공제",s:bN,v:"− "+won(Math.min(basic,income)),minus:1});
+  var tb=Math.max(0,income-basic);
+  L.push({k:"과세표준",v:won(tb)});
+
+  var add=0, sN="기본세율 6~45%";
+  if(!one && p.adj){
+    var m={now:{two:.20,three:.30},y27:{two:.05,three:.10},y28:{two:.10,three:.15},y29:{two:.20,three:.30}};
+    add=m[era][p.type]; sN="기본세율 + 중과 "+(add*100).toFixed(0)+"%p ("+(p.type==="three"?"3주택 이상":"2주택")+")";
+  }
+  var tax;
+  if(p.hold<1){ tax=tb*.70; sN="1년 미만 단기보유 70%"; }
+  else if(p.hold<2){ tax=tb*.60; sN="1~2년 단기보유 60%"; }
+  else tax=prog(tb,INC,add);
+  L.push({k:"양도소득세",s:sN,v:won(tax)});
+  L.push({k:"지방소득세",s:"양도세의 10%",v:"+ "+won(tax*.1)});
+  L.push({k:"납부할 세금",v:won(tax*1.1),total:1});
+  return {total:tax*1.1,ledger:L};
+}
+
+/* ===== 렌더 ===== */
+var EH=[{id:"now",y:"현행",t:"2026년까지"},{id:"y27",y:"2027",t:"공제·비율 개편"},{id:"y28",y:"2028",t:"세율 일원화"},{id:"y29",y:"2029~",t:"공제한도 축소"}];
+var ES=[{id:"now",y:"현행",t:"2026년 양도"},{id:"y27",y:"2027",t:"중과 최대 완화"},{id:"y28",y:"2028",t:"장특 개편 시작"},{id:"y29",y:"2029~",t:"중과 원상복귀"}];
+
+function renderTrack(el,eras,res,best){
+  var max=Math.max.apply(null,res.map(function(r){return r.total}).concat([1]));
+  var b0=res[0].total;
+  el.innerHTML=eras.map(function(e,i){
+    var v=res[i].total, w=Math.max(2,v/max*100), d=i===0?null:v-b0;
+    var cls=i===0?"c-now":(d>0?"c-up":d<0?"c-down":"c-now");
+    var dt = d===null?"" : Math.abs(d)<10000 ? '<span class="delta">동일</span>'
+      : '<span class="delta">'+(d>0?"▲":"▼")+" "+won(Math.abs(d))+'</span>';
+    return '<div class="row '+(i===best?"best":"")+'">'
+      +'<div class="yr"><span class="y">'+e.y+'</span><span class="t">'+e.t+'</span></div>'
+      +'<div class="bar-area"><div class="bar-bg"><div class="bar '+cls+'" style="width:'+w+'%"></div></div>'
+      +'<div class="bar-label"><span class="amt">'+won(v)+'</span>'+dt+'</div></div></div>';
+  }).join("");
+}
+function renderLedger(tabs,led,eras,res,sel,cb){
+  tabs.innerHTML=eras.map(function(e,i){return '<button data-i="'+i+'" aria-pressed="'+(i===sel)+'">'+e.y+'</button>'}).join("");
+  tabs.onclick=function(ev){var b=ev.target.closest("button"); if(b) cb(+b.dataset.i);};
+  led.innerHTML=res[sel].ledger.map(function(r){
+    return '<div class="lrow '+(r.minus?"minus":"")+' '+(r.total?"total":"")+'">'
+      +'<span class="k">'+r.k+(r.s?'<small>'+r.s+'</small>':'')+'</span><span class="v">'+r.v+'</span></div>';
+  }).join("");
+}
+function sealHTML(txt,sub){return '<div class="seal"><span class="big">'+txt+'</span><span class="small">'+sub+'</span></div>';}
+
+/* ===== 상태 ===== */
+var hSel=0,sSel=0,curTab="hold",lastH=null,lastS=null;
+
+function runH(){
+  var t=$("#h-type").value, multi=(t==="multi2"||t==="multi3");
+  $("#h-resid-wrap").style.display=multi?"block":"none";
+  $("#h-adj-wrap").style.display=multi?"block":"none";
+  $("#h-joint-wrap").style.display=multi?"none":"block";
+  var isJoint = !multi && $("#h-joint").checked;
+  $("#h-share-wrap").style.display= isJoint?"block":"none";
+  var p={type:t,price:(+$("#h-price").value||0)*억,resid:(+$("#h-resid").value||0)*억,
+    adj:$("#h-adj").checked,hold:+$("#h-hold").value||0,live:+$("#h-live").value||0,age:+$("#h-age").value||0,
+    joint:isJoint, share:Math.min(99,Math.max(1,+$("#h-share").value||50))};
+  var res=EH.map(function(e){return calcJB(e.id,p)});
+  var none=res.every(function(r){return r.total<1});
+  var best=0; res.forEach(function(r,i){ if(r.total<res[best].total-1) best=i; });
+  if(none) best=-1;
+  renderTrack($("#h-track"),EH,res,best);
+
+  var b0=res[0].total, last=res[3].total;
+  if(none){
+    $("#h-lead").textContent="종부세 과세 대상이 아닙니다";
+    $("#h-amt").textContent="0원";
+    $("#h-note2").innerHTML="1세대 1주택은 공시가격 14억, 그 외는 9억을 넘어야 부과됩니다.";
+    $("#h-seal").innerHTML="";
+  } else {
+    $("#h-lead").innerHTML="2029년 이후 기준 연간 종부세";
+    $("#h-amt").textContent=won(last);
+    var d=last-b0;
+    $("#h-note2").innerHTML = Math.abs(d)<10000 ? "현행과 사실상 동일합니다"
+      : d>0 ? '현행 '+won(b0)+' 대비 <b class="up">'+won(d)+' 증가</b>'
+            : '현행 '+won(b0)+' 대비 <b>'+won(-d)+' 감소</b>';
+    $("#h-seal").innerHTML = sealHTML("최저", EH[best].y==="현행"?"NOW":EH[best].y.replace("~",""));
+  }
+  if(hSel>3)hSel=0;
+  renderLedger($("#h-ltabs"),$("#h-ledger"),EH,res,hSel,function(i){hSel=i;runH();});
+  $("#h-note").innerHTML='과세 기준: 1세대 1주택은 공시가격 14억(현행 12억), 그 외는 9억을 넘어야 부과됩니다.'
+    +'<br>※ <b>재산세 중복분 공제</b>와 <b>세부담 상한</b>은 반영하지 않았습니다. 실제 고지세액은 이보다 낮을 수 있습니다.'
+    +'<br>※ 세부담 상한은 개정안에서도 <b>현행 150%</b>가 유지됩니다.'
+    +(isJoint?'<br>※ 공동명의는 각자 과세와 1주택 특례 중 <b>유리한 쪽</b>을 자동 적용합니다. 특례는 지분이 큰 사람이 신고하며, 연령·거주 공제는 그 사람 기준입니다.':'');
+  lastH={txt:none?"과세 대상 아님":won(last), cap:none?"종합부동산세":"2029년 기준 종부세"};
+  syncDock(); saveURL();
+}
+
+function runS(){
+  var one=$("#s-type").value==="one";
+  $("#s-adj-wrap").style.display=one?"none":"block";
+  var p={type:$("#s-type").value,adj:$("#s-adj").checked,
+    sell:(+$("#s-sell").value||0)*억,buy:(+$("#s-buy").value||0)*억,cost:(+$("#s-cost").value||0)*만,
+    hold:+$("#s-hold").value||0,live:+$("#s-live").value||0};
+  var res=ES.map(function(e){return calcYD(e.id,p)});
+  var none=res.every(function(r){return r.total<1});
+  var best=0; res.forEach(function(r,i){ if(r.total<res[best].total-1) best=i; });
+  if(none) best=-1;
+  renderTrack($("#s-track"),ES,res,best);
+
+  var b0=res[0].total, bv=best>=0?res[best].total:0;
+  if(none){
+    $("#s-lead").textContent="양도소득세가 발생하지 않습니다";
+    $("#s-amt").textContent="0원";
+    $("#s-note2").textContent="1세대 1주택 비과세 요건을 충족합니다.";
+    $("#s-seal").innerHTML="";
+  } else {
+    $("#s-lead").innerHTML = best===0 ? "지금 팔 때 세금" : '<b>'+ES[best].y+'년</b>에 팔면';
+    $("#s-amt").textContent=won(bv);
+    $("#s-note2").innerHTML = best===0 ? "현재가 가장 유리한 시점입니다"
+      : '현행 '+won(b0)+' 대비 <b>'+won(b0-bv)+' 절세</b>';
+    $("#s-seal").innerHTML = sealHTML("최저", ES[best].y==="현행"?"NOW":ES[best].y.replace("~",""));
+  }
+  if(sSel>3)sSel=0;
+  renderLedger($("#s-ltabs"),$("#s-ledger"),ES,res,sSel,function(i){sSel=i;runS();});
+  $("#s-note").innerHTML='잔금일이 속한 연도로 판단합니다. 1세대 1주택 비과세는 보유 2년(조정대상지역은 거주 2년) 요건이 필요합니다.'
+    +'<br>※ 환산취득가액, 상속·증여 주택, 부담부증여, 일시적 2주택 특례는 반영하지 않았습니다.'
+    +'<br>※ 다주택 중과 완화는 <b>2027~2028년 2년만</b> 열립니다.';
+  lastS={txt:none?"비과세":won(bv), cap:none?"양도소득세":(best===0?"지금 매도 시":ES[best].y+"년 매도 시")};
+  syncDock(); saveURL();
+}
+
+function syncDock(){
+  var d=$("#dock");
+  d.classList.toggle("hide", curTab==="diff");
+  if(curTab==="diff") return;
+  var s=curTab==="hold"?lastH:lastS;
+  if(!s) return;
+  $("#dock-cap").textContent=s.cap;
+  $("#dock-val").textContent=s.txt;
+}
+$("#dock").onclick=function(){
+  var el=curTab==="hold"?$("#h-result"):$("#s-result");
+  el.scrollIntoView({behavior:"smooth",block:"start"});
+};
+
+/* ===== 탭 ===== */
+$$("nav.tabs button").forEach(function(b){
+  b.onclick=function(){
+    $$("nav.tabs button").forEach(function(x){x.setAttribute("aria-selected",x===b)});
+    $$(".panel").forEach(function(p){p.classList.remove("on")});
+    $("#p-"+b.dataset.tab).classList.add("on");
+    curTab=b.dataset.tab; syncDock(); saveURL();
+    window.scrollTo({top:0,behavior:"smooth"});
+  };
+});
+
+/* ===== URL 상태 저장/복원 ===== */
+var HF=["h-type","h-price","h-resid","h-hold","h-live","h-age","h-share"], SF=["s-type","s-sell","s-buy","s-cost","s-hold","s-live"];
+function saveURL(){
+  var v=HF.map(function(id){return $("#"+id).value}).join(",")
+    +"|"+($("#h-adj").checked?1:0)+($("#h-joint").checked?1:0)
+    +"|"+SF.map(function(id){return $("#"+id).value}).join(",")
+    +"|"+($("#s-adj").checked?1:0)+"|"+curTab;
+  history.replaceState(null,"","#"+encodeURIComponent(v));
+}
+function loadURL(){
+  if(!location.hash) return;
+  try{
+    var p=decodeURIComponent(location.hash.slice(1)).split("|");
+    if(p.length<5) return;
+    p[0].split(",").forEach(function(v,i){ if(v!=="") $("#"+HF[i]).value=v; });
+    $("#h-adj").checked = p[1].charAt(0)==="1"; $("#h-joint").checked = p[1].charAt(1)==="1";
+    p[2].split(",").forEach(function(v,i){ if(v!=="") $("#"+SF[i]).value=v; });
+    $("#s-adj").checked = p[3]==="1";
+    var t=p[4];
+    if(t&&t!=="hold"){ var btn=document.querySelector('nav.tabs button[data-tab="'+t+'"]'); if(btn) btn.click(); }
+  }catch(e){}
+}
+
+/* ===== 공유 ===== */
+function toast(m){ var t=$("#toast"); t.textContent=m; t.classList.add("on"); setTimeout(function(){t.classList.remove("on")},1900); }
+$("#share").onclick=function(){
+  saveURL();
+  var url=location.href;
+  var s=curTab==="hold"?lastH:lastS;
+  var text = s ? "2026 부동산 세제개편 — "+s.cap+" "+s.txt : "2026 부동산 세제개편 세금 계산기";
+  if(navigator.share){
+    navigator.share({title:"세금 시간표",text:text,url:url}).catch(function(){});
+  } else if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(function(){toast("링크를 복사했습니다")},function(){toast("복사에 실패했습니다")});
+  } else { toast("주소창의 링크를 복사해 주세요"); }
+};
+
+$$("#p-hold input, #p-hold select").forEach(function(el){el.addEventListener("input",runH)});
+$$("#p-sell input, #p-sell select").forEach(function(el){el.addEventListener("input",runS)});
+loadURL(); runH(); runS(); syncDock();
+</script>
+</body>
+</html>
